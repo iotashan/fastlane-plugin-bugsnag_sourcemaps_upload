@@ -18,7 +18,7 @@ module Fastlane
           --entry-file #{entry_file}")
       end
 
-      def self.upload_bundle(api_key, platform, app_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
+      def self.upload_bundle(api_key, platform, app_version, app_version_code, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
         command = "npx bugsnag-sourcemaps upload --api-key #{api_key} --source-map #{path} --minified-file #{bundle_path} "
         if upload_sources
           command += "--upload-sources "
@@ -37,6 +37,9 @@ module Fastlane
         end
         if app_version
           command += "--app-version=#{app_version} "
+        end
+        if app_version_code
+          command += "--app-version-code=#{app_version_code} "
         end
         if code_bundle_id
           command += " --code-bundle-id #{code_bundle_id} "

@@ -7,6 +7,7 @@ module Fastlane
       def self.run(params)
         api_key = params[:api_key]
         app_version = params[:app_version]
+        app_version_code = params[:app_version_code]
         code_bundle_id = params[:code_bundle_id]
         platform = params[:platform]
         dir = params[:sourcemaps_dir]
@@ -38,7 +39,7 @@ module Fastlane
         if generate_sourcemaps
           Helper::BugsnagSourcemapsUploadHelper.create_bundle(platform, entry_file, path, bundle_path)
         end
-        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
+        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, app_version_code, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
       end
 
       def self.description
@@ -70,6 +71,11 @@ module Fastlane
                                       type: String),
           FastlaneCore::ConfigItem.new(key: :app_version,
                                   env_name: "BUGSNAG_SOURCEMAPS_APP_VERSION",
+                               description: "Target app version",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :app_version_code,
+                                  env_name: "BUGSNAG_SOURCEMAPS_APP_VERSION_CODE",
                                description: "Target app version",
                                   optional: true,
                                       type: String),
