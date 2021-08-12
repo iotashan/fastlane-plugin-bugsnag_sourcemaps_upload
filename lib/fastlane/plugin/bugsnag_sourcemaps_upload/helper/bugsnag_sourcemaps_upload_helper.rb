@@ -18,46 +18,28 @@ module Fastlane
           --entry-file #{entry_file}")
       end
 
-      def self.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
+      def self.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, overwrite, wildcard_prefix, upload_modules, endpoint, project_root)
         command = "npx @bugsnag/source-maps upload-react-native --platform #{platform} --api-key #{api_key} --source-map #{path} --bundle #{bundle_path} "
-        if upload_sources
-          command += "--upload-sources "
-        end
-        if upload_modules
-          command += "--upload-node-modules "
-        end
-        if minified_url
-          command += "--minified-url #{minified_url} "
-        else
-          if platform == "ios"
-            command += "--minified-url main.jsbundle "
-          else
-            command += "--minified-url index.android.bundle "
-          end
-        end
         if app_version
-          command += "--app-version=#{app_version} "
-        end
-        if app_version_code
-          command += "--app-version-code=#{app_version_code} "
-        end
-        if app_bundle_version
-          command += "--app-bundle-version=#{app_bundle_version} "
+          command += "--app-version #{app_version} "
         end
         if code_bundle_id
           command += " --code-bundle-id #{code_bundle_id} "
         end
-        if strip
-          command += "--strip-project-root "
+        if app_version_code
+          command += "--app-version-code #{app_version_code} "
         end
-        if overwrite
-          command += "--overwrite "
+        if app_bundle_version
+          command += "--app-bundle-version #{app_bundle_version} "
         end
-        if wildcard_prefix
-          command += "--add-wildcard-prefix "
+        if overwrite.eql? false
+          command += "--no-overwrite "
         end
         if endpoint
           command += "--endpoint #{endpoint} "
+        end
+        if project_root
+          command += "--project-root #{project_root} "
         end
         UI.message("Uploading React Native bundle to Bugsnag")
         Action.sh(command.to_s)

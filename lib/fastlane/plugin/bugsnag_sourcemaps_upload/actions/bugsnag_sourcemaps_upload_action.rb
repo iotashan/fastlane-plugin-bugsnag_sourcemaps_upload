@@ -14,15 +14,11 @@ module Fastlane
         dir = params[:sourcemaps_dir]
         sourcemap = params[:sourcemap]
         bundle = params[:bundle]
-        minified_url = params[:minified_url]
         overwrite = params[:overwrite]
-        strip = params[:strip]
-        wildcard_prefix = params[:wildcard_prefix]
         generate_sourcemaps = params[:generate_sourcemaps]
-        upload_sources = params[:upload_sources]
-        upload_modules = params[:upload_modules]
         entry_file = params[:entry_file]
         endpoint = params[:endpoint]
+        project_root = params[:project_root]
 
         path = ""
         if sourcemap
@@ -40,7 +36,7 @@ module Fastlane
         if generate_sourcemaps
           Helper::BugsnagSourcemapsUploadHelper.create_bundle(platform, entry_file, path, bundle_path)
         end
-        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
+        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, overwrite, endpoint, project_root)
       end
 
       def self.description
@@ -112,46 +108,17 @@ module Fastlane
                                description: "Override path(relative to sourcemaps_dir) bundle to upload, default is platform-specific",
                                   optional: true,
                                       type: String),
-          FastlaneCore::ConfigItem.new(key: :minified_url,
-                                  env_name: "BUGSNAG_SOURCEMAPS_MINIFIED_URL",
-                               description: "Override Bugsnag mified url, default is platform specific",
-                                  optional: true,
-                                      type: String),
           FastlaneCore::ConfigItem.new(key: :overwrite,
                                   env_name: "BUGSNAG_SOURCEMAPS_OVERWRITE",
                                description: "Overwrite existing sourcemaps in Bugsnag",
                                   optional: true,
                              default_value: true,
                                       type: Boolean),
-          FastlaneCore::ConfigItem.new(key: :strip,
-                                  env_name: "BUGSNAG_SOURCEMAPS_STRIP_PROJECT_ROOT",
-                               description: "Strip project root",
-                                  optional: true,
-                             default_value: true,
-                                      type: Boolean),
-          FastlaneCore::ConfigItem.new(key: :wildcard_prefix,
-                                  env_name: "BUGSNAG_SOURCEMAPS_WILDCARD_PREFIX",
-                               description: "Add wildcard prefix for Bugsnag",
-                                  optional: true,
-                             default_value: false,
-                                      type: Boolean),
           FastlaneCore::ConfigItem.new(key: :generate_sourcemaps,
                                   env_name: "BUGSNAG_SOURCEMAPS_GENERATE",
                                description: "Generate React-Native sourcemaps",
                                   optional: true,
                              default_value: true,
-                                      type: Boolean),
-          FastlaneCore::ConfigItem.new(key: :upload_sources,
-                                  env_name: "BUGSNAG_SOURCEMAPS_UPLOAD_MODULES",
-                               description: "Upload source files referenced by the source map",
-                                  optional: true,
-                             default_value: true,
-                                      type: Boolean),
-          FastlaneCore::ConfigItem.new(key: :upload_modules,
-                                  env_name: "BUGSNAG_SOURCEMAPS_UPLOAD_MODULES",
-                               description: "Upload dependency files referenced by the source map",
-                                  optional: true,
-                             default_value: false,
                                       type: Boolean),
           FastlaneCore::ConfigItem.new(key: :entry_file,
                                   env_name: "BUGSNAG_SOURCEMAPS_ENTRY_FILE",
@@ -162,6 +129,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :endpoint,
                                   env_name: "BUGSNAG_SOURCEMAPS_ENDPOINT",
                                description: "Bugsnag endpoint(when using Bugsnag On-premise)",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :project_root,
+                                  env_name: "BUGSNAG_SOURCEMAPS_PROJECT_ROOT",
+                               description: "the top level directory of your project",
                                   optional: true,
                                       type: String)
         ]
