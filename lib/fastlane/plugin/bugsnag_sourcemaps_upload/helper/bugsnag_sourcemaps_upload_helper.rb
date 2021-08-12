@@ -18,7 +18,7 @@ module Fastlane
           --entry-file #{entry_file}")
       end
 
-      def self.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, overwrite, wildcard_prefix, upload_modules, endpoint, project_root)
+      def self.upload_bundle(api_key, platform, app_version, app_version_code, app_bundle_version, code_bundle_id, path, bundle_path, overwrite, endpoint, project_root)
         command = "npx @bugsnag/source-maps upload-react-native --platform #{platform} --api-key #{api_key} --source-map #{path} --bundle #{bundle_path} "
         if app_version
           command += "--app-version #{app_version} "
